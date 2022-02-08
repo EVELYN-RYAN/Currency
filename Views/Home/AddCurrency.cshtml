@@ -5,7 +5,7 @@
 @model Currency
 
 <form method="post" style="padding-left:5rem">
-    @try
+    @try //if a model hasn't been passed then default to fill new form
     {
         if (Model.CurrencyID != 0)
         {

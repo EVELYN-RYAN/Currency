@@ -19,6 +19,7 @@ namespace Currency.Models
 
         protected override void OnModelCreating(ModelBuilder mb)
         {
+            //Seeding the Database with preset data ensuring the page loads with some data.
             mb.Entity<Currency>().HasData(
                 new Currency
                 {
