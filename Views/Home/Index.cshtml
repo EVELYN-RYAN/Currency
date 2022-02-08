@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Currency Converter";
+}
+  
+<div style="padding-left: 4rem;">
+    <h2>Currency Converter</h2>
+    @using (Html.BeginForm("Index", "Home"))
+    {
+        <label for="FromCurrency">From</label>
+        <Select name="fromCode">
+            @foreach (Currency x in Model)
+            {
+                if (x.CurrencyCode == @ViewData["FromCode"].ToString())
+                {
+                    <option selected="selected" value="@x.CurrencyCode">@x.CurrencyCode</option>
+                }
+                else
+                {
+                    <option value="@x.CurrencyCode">@x.CurrencyCode</option>
+                }
+            }
+
+        </Select>
+        @foreach (Currency u in Model)
+            if (u.CurrencyCode == @ViewData["FromCode"].ToString())
+            {
+                <label>--> @u.Unit</label>
+            }
+        <input name="amount" for="Amount" type="number" value="@ViewData["Amount"]">
+
+        <label for="ToRate">To</label>
+        <Select name="toCode">
+            @foreach (Currency x in Model)
+            {
+                if (x.CurrencyCode == @ViewData["ToCode"].ToString())
+                {
+                    <option selected="selected" value="@x.CurrencyCode">@x.CurrencyCode</option>
+                }
+                else
+                {
+                    <option value="@x.CurrencyCode">@x.CurrencyCode</option>
+                }
+            }
+        </Select>
+        @foreach (Currency u in Model)
+            if (u.CurrencyCode == @ViewData["ToCode"].ToString())
+            {
+                <label>--> @u.Unit</label>
+            }
+
+        <span><b>@ViewData["Conversion"]</b></span>
+        <button class="btn btn-info" type="submit">Convert</button>
+
+
+
+        <br><br>
+
+
+
+        <h2>Rates</h2>
+        <span>1 </span><Select name="rate">
+            @foreach (Currency y in Model)
+            {
+                if (y.CurrencyCode == @ViewData["RateCode"].ToString())
+                {
+                    <option selected="selected" value="@y.CurrencyCode">@y.CurrencyFullName</option>
+                }
+                else
+                {
+                    <option value="@y.CurrencyCode">@y.CurrencyFullName</option>
+                }
+            }
+        </Select>
+        <span> equals </span><b class="code">@ViewData["Rate"]</b><b> of a USD</b>
+    }
+    <br><br>
+    <table class="AllCurrencies table-striped table-dark" width="70%">
+        <tr>
+            <th>Currency Name</th>
+            <th>Currency Abbreviation</th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Change from last update</th>
+            <th></th>
+        </tr>
+        @foreach (Currency c in Model)
+        {
+            decimal diff = c.Rate - c.PrevRate;
+            decimal changePer = Math.Round(diff / c.PrevRate * 100, 2);
+            <tr>
+                <td value="@c.CurrencyFullName">@c.CurrencyFullName</td>
+                <td value="@c.CurrencyCode">@c.CurrencyCode</td>
+                <td value="@c.Unit">@c.Unit</td>
+                <td value="@c.Rate">@c.Rate</td>
+                @if (diff > 0)
+                {
+                    <td style="color:green;" value="@diff">@diff [+@changePer%] </td>
+                }
+                else if ((c.Rate - c.PrevRate) < 0)
+                {
+                    <td style="color:red;" value="@diff">@diff [@changePer%]</td>
+                }
+                else
+                {
+                    <td value="@diff">@diff</td>
+                }
+                <td><a asp-controller="Home" asp-action="Update" asp-route-currencyid="@c.CurrencyID">Update</a></td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a asp-controller="Home" asp-action="AddCurrency">Add+</a></td>
+        </tr>
+
+    </table>
+</div>

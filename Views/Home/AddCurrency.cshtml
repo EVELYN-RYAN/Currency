@@ -1,0 +1,44 @@
+﻿@{
+        ViewData["Title"] = "Add a Currency";
+ }
+
+@model Currency
+
+<form method="post" style="padding-left:5rem">
+    @try
+    {
+        if (Model.CurrencyID != 0)
+        {
+            <label asp-for="CurrencyFullName">Currency Name</label>
+            <input asp-for="CurrencyFullName" type="text" />
+
+            <input type="hidden" asp-for="CurrencyCode" />
+
+            <input type="hidden" asp-for="Unit" />
+            <label asp-for="Rate">Current Rate</label>
+            <input asp-for="Rate" type="number" step="any" />
+            <input type="hidden" asp-for="PrevRate" value="@Model.Rate" />
+            <br />
+            <br />
+            <button class="btn btn-info" type="submit">Update</button>
+
+        }
+    }
+    catch (Exception e)
+    {
+
+        <label asp-for="CurrencyFullName">Currency Name</label>
+        <input asp-for="CurrencyFullName" type="text" />
+        <label asp-for="CurrencyCode"> Abbreviation</label>
+        <input asp-for="CurrencyCode" type="text" />
+        <label asp-for="Unit"></label>
+        <input asp-for="Unit" type="text" />
+        <label asp-for="Rate">Current Rate</label>
+        <input asp-for="Rate" type="number" step="any"/>
+        <br />
+        <br />
+        <button class="btn btn-success" type="submit">Add</button> <button class="btn btn-info" onclick="history.back()">Go Back</button>
+
+    }
+</form>
+<div asp-validation-summary="All"></div>
